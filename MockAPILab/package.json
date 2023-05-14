@@ -1,7 +1,7 @@
 {
   "name": "mockapilab",
   "version": "1.0.0",
-  "description": "A Mock API to be used with LTK Skills assesments",
+  "description": "A Mock API to be used with LTK Skills assessments",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -10,7 +10,9 @@
   "author": "Tom Watson",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.1.1"
   },
   "devDependencies": {
     "jest": "^29.5.0"
