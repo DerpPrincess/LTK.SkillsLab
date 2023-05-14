@@ -6,6 +6,8 @@ const isLocal = true;
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
+app.use(express.json());
+
 const userSchema = new schema(
   {
     loanId: Number,
