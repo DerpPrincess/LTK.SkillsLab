@@ -1,32 +1,21 @@
-import * as React from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import AccountMenu from "./AccountMenu";
-import BasicForm from "./BasicForm";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+
+const Home = lazy(() => import("./pages/Home"));
+const Todo = lazy(() => import("./pages/Todo"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
-  const [openForm, setOpenForm] = React.useState(false);
-
-  const handleOnClick = (page) => {
-    console.log("open");
-    if (!openForm) {
-      setOpenForm(true);
-    } else {
-      setOpenForm(false);
-    }
-  };
-
   return (
-    <Container maxWidth="sm">
-      <AccountMenu onClick={handleOnClick} />
-      {openForm && <BasicForm />}
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          React Skills test
-        </Typography>
-      </Box>
-    </Container>
+    <Suspense fallback={<h2>🌀 Loading...</h2>}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/todo" element={<Todo />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </Suspense>
   );
 }

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -77,7 +78,9 @@ export default function AccountMenu({ onClick }) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={onClick}>
-          <Avatar /> Open Form
+          <Link to="/todo">
+            <Avatar /> Open Form
+          </Link>
         </MenuItem>
       </Menu>
     </React.Fragment>

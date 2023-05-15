@@ -36,16 +36,63 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => console.log("connected to mongoDB"));
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "✨ 👋🌏 ✨",
-    stage: process.env.NODE_ENV,
+app.get("/api/v1/ltk/all", (req, res) => {
+  userData.find({}).then((data) => {
+    res.json(data);
   });
 });
 
-app.get("/ping", (req, res) => {
-  res.json({
-    message: "🏓",
+app.get("/api/v1/ltk/:id", (req, res) => {
+  const { id } = req.params;
+
+  userData.find({ loanId: id }).then((data) => {
+    res.json(data);
+  });
+});
+
+app.post("/api/v1/ltk/:loanId", (req, res) => {
+  const { loanId } = req.params;
+  const { borrowers } = req.body;
+
+  const newUserData = new userData({
+    loanId,
+    borrowers,
+  });
+
+  newUserData.save().then(res.json(newUserData));
+});
+
+app.patch("/api/v1/ltk/:loanId", (req, res) => {
+  const { loanId } = req.params;
+  const { borrowers } = req.body;
+
+  userData
+    .findOneAndUpdate({ loanId }, { borrowers })
+    .then(res.json(`Loan borrower by loanId:${loanId} was updated`));
+});
+
+app.delete("/api/v1/ltk/deleteBorrower/:loanId/:pairId", (req, res) => {
+  const { loanId, pairId } = req.params;
+  const { borrowers } = req.body;
+
+  userData.find({ loanId }).then((data) => {
+    const borrower = data[0].borrowers.filter((borrower) => {
+      borrower.pairId !== Number(pairId);
+    });
+
+    userData
+      .findOneAndUpdate({ loanId }, { borrowers: borrower })
+      .then(res.json(`Borrower:${pairId} was deleted`));
+  });
+});
+
+app.delete("/api/v1/ltk/deleteLoan/:loanId", async (req, res) => {
+  const { loanId } = req.params;
+
+  userData.find({ loanId }).then(() => {
+    userData
+      .deleteMany({ loanId })
+      .then(res.json(`Loan:${loanId} was deleted`));
   });
 });
 
